@@ -1,0 +1,6 @@
+{
+  "name": "canton-settlement-app",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.11.0"
+}
