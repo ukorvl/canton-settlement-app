@@ -1,5 +1,5 @@
 sdk-version: 3.4.11
-name: .
+name: name
 source: daml
 version: 0.0.1
 dependencies:
