@@ -1,0 +1,38 @@
+module SettlementRoom.Trade where
+
+template TradeProposal
+  with
+    tradeId : Text
+    seller : Party
+    buyer : Party
+    isin : Text
+    quantity : Decimal
+    price : Decimal
+    currency : Text
+  where
+    signatory seller
+    observer buyer
+
+    choice AcceptTrade : ContractId AcceptedTrade
+      controller buyer
+      do
+        create AcceptedTrade with
+          tradeId
+          seller
+          buyer
+          isin
+          quantity
+          price
+          currency
+
+template AcceptedTrade
+  with
+    tradeId : Text
+    seller : Party
+    buyer : Party
+    isin : Text
+    quantity : Decimal
+    price : Decimal
+    currency : Text
+  where
+    signatory seller, buyer
