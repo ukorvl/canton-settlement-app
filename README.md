@@ -14,6 +14,8 @@ This is a simple application that demonstrates [Canton](https://www.canton.netwo
 
 It demonstrates how Canton network can be useful for institutional players in the financial industry by providing partial privacy while maintaining full compatibility.
 
+A common financial world problem - DvP (Delivery versus Payment) settlement of a bond trade is implemented as a use case.
+
 ## Development
 
 This project consists of multiple parts:
