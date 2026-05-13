@@ -1,18 +1,24 @@
 module SettlementRoom.Bond where
 
+-- A spendable bond position.
 template BondHolding
   with
+    -- Institution that records or administers the bond position.
     registrar : Party
     owner : Party
+    -- Security identifier of the bond, usually an ISIN.
     isin : Text
     quantity : Decimal
   where
+    -- Registrar and owner both authorize creation of the bond holding.
     signatory registrar, owner
 
+    -- Reserve the bond position for one trade.
     choice LockBond : ContractId LockedBond
       with
         settlementOperator : Party
         tradeId : Text
+      -- The owner decides when their bond becomes locked.
       controller owner
       do
         create LockedBond with
@@ -23,6 +29,7 @@ template BondHolding
           settlementOperator
           tradeId
 
+-- A bond position that has been locked for a specific settlement flow.
 template LockedBond
   with
     registrar : Party
@@ -32,4 +39,5 @@ template LockedBond
     settlementOperator : Party
     tradeId : Text
   where
+    -- Registrar and owner remain the stakeholders of the locked bond.
     signatory registrar, owner

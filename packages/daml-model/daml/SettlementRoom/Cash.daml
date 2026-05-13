@@ -1,5 +1,6 @@
 module SettlementRoom.Cash where
 
+-- A spendable cash position.
 template CashHolding
   with
     issuer : Party
@@ -7,12 +8,15 @@ template CashHolding
     amount : Decimal
     currency : Text
   where
+    -- Both parties must authorize creation of the cash holding.
     signatory issuer, owner
 
+    -- Reserve (lock) the cash for one trade so it cannot be reused elsewhere.
     choice LockCash : ContractId LockedCash
       with
         settlementOperator : Party
         tradeId : Text
+      -- The owner decides when their cash becomes locked.
       controller owner
       do
         create LockedCash with
@@ -23,6 +27,7 @@ template CashHolding
           settlementOperator
           tradeId
 
+-- A cash position that has been locked for a specific settlement flow.
 template LockedCash
   with
     issuer : Party
@@ -32,4 +37,5 @@ template LockedCash
     settlementOperator : Party
     tradeId : Text
   where
+    -- Issuer and owner remain the stakeholders of the locked cash.
     signatory issuer, owner

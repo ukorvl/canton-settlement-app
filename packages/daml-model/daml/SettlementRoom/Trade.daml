@@ -2,20 +2,26 @@ module SettlementRoom.Trade where
 
 import SettlementRoom.Settlement
 
+-- A seller's offer to trade a bond for cash.
 template TradeProposal
   with
     tradeId : Text
     seller : Party
     buyer : Party
+    -- Security identifier of the bond being traded.
     isin : Text
     quantity : Decimal
     price : Decimal
     currency : Text
   where
+    -- The seller is the party publishing the proposal.
     signatory seller
+    -- The buyer can see the proposal before deciding whether to accept it.
     observer buyer
 
+    -- Buyer acceptance turns the proposal into a bilateral trade.
     choice AcceptTrade : ContractId AcceptedTrade
+      -- The buyer is the party that decides whether to accept.
       controller buyer
       do
         create AcceptedTrade with
@@ -27,6 +33,7 @@ template TradeProposal
           price
           currency
 
+-- A trade that both buyer and seller now accept as agreed.
 template AcceptedTrade
   with
     tradeId : Text
@@ -37,13 +44,16 @@ template AcceptedTrade
     price : Decimal
     currency : Text
   where
+    -- Both trading parties are bound once the trade is accepted.
     signatory seller, buyer
 
+    -- Move the accepted trade into a pending settlement workflow.
     choice StartSettlement : ContractId PendingSettlement
       with
         cashBank : Party
         assetRegistrar : Party
         settlementOperator : Party
+      -- The seller starts the settlement process.
       controller seller
       do
         create PendingSettlement with

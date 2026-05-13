@@ -1,5 +1,6 @@
 module SettlementRoom.Settlement where
 
+-- A trade that is accepted and waiting for final settlement steps.
 template PendingSettlement
   with
     tradeId : Text
@@ -8,10 +9,13 @@ template PendingSettlement
     cashBank : Party
     assetRegistrar : Party
     settlementOperator : Party
+    -- Security identifier of the bond being settled.
     isin : Text
     quantity : Decimal
     price : Decimal
     currency : Text
   where
+    -- Buyer and seller remain the main stakeholders of the settlement.
     signatory buyer, seller
+    -- Supporting institutions can see the settlement while it is pending.
     observer cashBank, assetRegistrar, settlementOperator
