@@ -1,0 +1,35 @@
+module SettlementRoom.Bond where
+
+template BondHolding
+  with
+    registrar : Party
+    owner : Party
+    isin : Text
+    quantity : Decimal
+  where
+    signatory registrar, owner
+
+    choice LockBond : ContractId LockedBond
+      with
+        settlementOperator : Party
+        tradeId : Text
+      controller owner
+      do
+        create LockedBond with
+          registrar
+          owner
+          isin
+          quantity
+          settlementOperator
+          tradeId
+
+template LockedBond
+  with
+    registrar : Party
+    owner : Party
+    isin : Text
+    quantity : Decimal
+    settlementOperator : Party
+    tradeId : Text
+  where
+    signatory registrar, owner
