@@ -39,3 +39,17 @@ template LockedCash
   where
     -- Issuer and owner remain the stakeholders of the locked cash.
     signatory issuer, owner
+    -- The settlement operator can see and settle the locked cash.
+    observer settlementOperator
+
+    -- Consume the locked cash and recreate it for the receiving party.
+    choice SettleLockedCash : ContractId CashHolding
+      with
+        newOwner : Party
+      controller settlementOperator
+      do
+        create CashHolding with
+          issuer
+          owner = newOwner
+          amount
+          currency

@@ -1,5 +1,8 @@
 module SettlementRoom.Settlement where
 
+import SettlementRoom.Bond
+import SettlementRoom.Cash
+
 -- A trade that is accepted and waiting for final settlement steps.
 template PendingSettlement
   with
@@ -18,4 +21,58 @@ template PendingSettlement
     -- Buyer and seller remain the main stakeholders of the settlement.
     signatory buyer, seller
     -- Supporting institutions can see the settlement while it is pending.
+    observer cashBank, assetRegistrar, settlementOperator
+
+    -- Finalize settlement by consuming the locked cash and locked bond.
+    choice Settle : ContractId SettlementReceipt
+      with
+        lockedCashCid : ContractId LockedCash
+        lockedBondCid : ContractId LockedBond
+      controller settlementOperator
+      do
+        lockedCash <- fetch lockedCashCid
+        lockedBond <- fetch lockedBondCid
+
+        assert (lockedCash.tradeId == tradeId)
+        assert (lockedBond.tradeId == tradeId)
+        assert (lockedCash.amount == price)
+        assert (lockedCash.currency == currency)
+        assert (lockedBond.isin == isin)
+        assert (lockedBond.quantity == quantity)
+
+        _ <- exercise lockedCashCid SettleLockedCash with
+          newOwner = seller
+
+        _ <- exercise lockedBondCid SettleLockedBond with
+          newOwner = buyer
+
+        create SettlementReceipt with
+          tradeId
+          buyer
+          seller
+          cashBank
+          assetRegistrar
+          settlementOperator
+          isin
+          quantity
+          price
+          currency
+
+-- A simple receipt that records a successful settlement.
+template SettlementReceipt
+  with
+    tradeId : Text
+    buyer : Party
+    seller : Party
+    cashBank : Party
+    assetRegistrar : Party
+    settlementOperator : Party
+    isin : Text
+    quantity : Decimal
+    price : Decimal
+    currency : Text
+  where
+    -- Buyer and seller are the main parties to the completed settlement.
+    signatory buyer, seller
+    -- Supporting institutions can also see the settlement receipt.
     observer cashBank, assetRegistrar, settlementOperator

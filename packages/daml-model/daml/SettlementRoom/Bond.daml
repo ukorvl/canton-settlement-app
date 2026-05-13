@@ -41,3 +41,17 @@ template LockedBond
   where
     -- Registrar and owner remain the stakeholders of the locked bond.
     signatory registrar, owner
+    -- The settlement operator can see and settle the locked bond.
+    observer settlementOperator
+
+    -- Consume the locked bond and recreate it for the receiving party.
+    choice SettleLockedBond : ContractId BondHolding
+      with
+        newOwner : Party
+      controller settlementOperator
+      do
+        create BondHolding with
+          registrar
+          owner = newOwner
+          isin
+          quantity
