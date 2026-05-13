@@ -1,14 +1,17 @@
 # canton-settlement-app
 
-Minimal pnpm workspace scaffold for learning Canton and Daml.
+## Table of Contents
 
-## Layout
+- [canton-settlement-app](#canton-settlement-app)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [License](#license)
 
-- `apps/api` for the service layer that can submit commands to Canton and expose data to clients.
-- `apps/web` for the browser UI.
-- `packages/daml-model` for the hand-written Daml model and ledger templates.
-- `packages/daml-generated` for code generated from Daml artifacts for TypeScript apps.
-- `packages/shared` for plain shared TypeScript utilities and types.
-- `docs/notes` for learning notes and design decisions.
-- `docs/diagrams` for architecture and workflow diagrams.
-- `scripts` for helper scripts used during local development.
+## Overview
+
+This is a simple application that demonstrates [Canton](https://www.canton.network)'s settlement capabilities. It implements Canton's core idea of a shared ledger, where multiple parties can interact with each other without the need for a trusted intermediary and full visibility.
+
+It demonstrates how Canton network can be useful for institutional players in the financial industry by providing partial privacy while maintaining full compatibility.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
