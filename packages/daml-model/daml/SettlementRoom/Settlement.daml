@@ -1,0 +1,17 @@
+module SettlementRoom.Settlement where
+
+template PendingSettlement
+  with
+    tradeId : Text
+    buyer : Party
+    seller : Party
+    cashBank : Party
+    assetRegistrar : Party
+    settlementOperator : Party
+    isin : Text
+    quantity : Decimal
+    price : Decimal
+    currency : Text
+  where
+    signatory buyer, seller
+    observer cashBank, assetRegistrar, settlementOperator

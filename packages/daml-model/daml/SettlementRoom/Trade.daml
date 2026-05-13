@@ -1,5 +1,7 @@
 module SettlementRoom.Trade where
 
+import SettlementRoom.Settlement
+
 template TradeProposal
   with
     tradeId : Text
@@ -36,3 +38,22 @@ template AcceptedTrade
     currency : Text
   where
     signatory seller, buyer
+
+    choice StartSettlement : ContractId PendingSettlement
+      with
+        cashBank : Party
+        assetRegistrar : Party
+        settlementOperator : Party
+      controller seller
+      do
+        create PendingSettlement with
+          tradeId
+          buyer
+          seller
+          cashBank
+          assetRegistrar
+          settlementOperator
+          isin
+          quantity
+          price
+          currency
