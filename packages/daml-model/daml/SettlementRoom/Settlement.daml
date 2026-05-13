@@ -1,5 +1,6 @@
 module SettlementRoom.Settlement where
 
+import DA.Assert
 import SettlementRoom.Bond
 import SettlementRoom.Cash
 
@@ -33,12 +34,18 @@ template PendingSettlement
         lockedCash <- fetch lockedCashCid
         lockedBond <- fetch lockedBondCid
 
-        assert (lockedCash.tradeId == tradeId)
-        assert (lockedBond.tradeId == tradeId)
-        assert (lockedCash.amount == price)
-        assert (lockedCash.currency == currency)
-        assert (lockedBond.isin == isin)
-        assert (lockedBond.quantity == quantity)
+        lockedCash.tradeId === tradeId
+        lockedBond.tradeId === tradeId
+        lockedCash.owner === buyer
+        lockedBond.owner === seller
+        lockedCash.issuer === cashBank
+        lockedBond.registrar === assetRegistrar
+        lockedCash.settlementOperator === settlementOperator
+        lockedBond.settlementOperator === settlementOperator
+        lockedCash.amount === price
+        lockedCash.currency === currency
+        lockedBond.isin === isin
+        lockedBond.quantity === quantity
 
         _ <- exercise lockedCashCid SettleLockedCash with
           newOwner = seller

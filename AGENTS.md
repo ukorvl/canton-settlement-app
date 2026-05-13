@@ -13,7 +13,7 @@
 
 ## Stack
 - Daml (sdk v3.4.11) for the ledger model and workflow logic.
-- TypeScript(v6.0.3) for API and frontend development.
-- `pnpm`(v10.11.0) for monorepo management.
+- TypeScript (v6.0.3) for API and frontend development.
+- `pnpm` (v10.11.0) for monorepo management.
 
 ## How to work with this repo
