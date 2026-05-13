@@ -1,0 +1,87 @@
+module Tests.SettlementFailures where
+
+import DA.Assert
+import Daml.Script
+import SettlementRoom.Bond
+import SettlementRoom.Cash
+import SettlementRoom.Settlement
+import SettlementRoom.Trade
+
+settlementFailsWithoutLockedBond : Script ()
+settlementFailsWithoutLockedBond = script do
+  buyer <- allocateParty "BuyerCo"
+  seller <- allocateParty "SellerCo"
+  cashBank <- allocateParty "CashBank"
+  assetRegistrar <- allocateParty "AssetRegistrar"
+  settlementOperator <- allocateParty "SettlementOperator"
+
+  let tradeId = "TRADE-NEG-001"
+  let isin = "US1234567890"
+  let quantity = 1.0
+  let price = 100.0
+  let currency = "USD"
+
+  cashHoldingCid <- submit (actAs [cashBank, buyer]) do
+    createCmd CashHolding with
+      issuer = cashBank
+      owner = buyer
+      amount = price
+      currency = currency
+
+  bondHoldingCid <- submit (actAs [assetRegistrar, seller]) do
+    createCmd BondHolding with
+      registrar = assetRegistrar
+      owner = seller
+      isin = isin
+      quantity = quantity
+
+  tradeProposalCid <- submit seller do
+    createCmd TradeProposal with
+      tradeId = tradeId
+      seller = seller
+      buyer = buyer
+      isin = isin
+      quantity = quantity
+      price = price
+      currency = currency
+
+  acceptedTradeCid <- submit buyer do
+    exerciseCmd tradeProposalCid AcceptTrade
+
+  pendingSettlementCid <- submit seller do
+    exerciseCmd acceptedTradeCid StartSettlement with
+      cashBank = cashBank
+      assetRegistrar = assetRegistrar
+      settlementOperator = settlementOperator
+
+  lockedCashCid <- submit buyer do
+    exerciseCmd cashHoldingCid LockCash with
+      settlementOperator = settlementOperator
+      tradeId = tradeId
+
+  lockedBondCid <- submit seller do
+    exerciseCmd bondHoldingCid LockBond with
+      settlementOperator = settlementOperator
+      tradeId = tradeId
+
+  submit (actAs [assetRegistrar, seller]) do
+    archiveCmd lockedBondCid
+
+  operatorLockedCash <- query @LockedCash settlementOperator
+  length operatorLockedCash === 1
+
+  operatorLockedBonds <- query @LockedBond settlementOperator
+  length operatorLockedBonds === 0
+
+  submitMustFail (actAs [settlementOperator, buyer, seller]) do
+    exerciseCmd pendingSettlementCid Settle with
+      lockedCashCid = lockedCashCid
+      lockedBondCid = lockedBondCid
+
+  operatorPendingSettlements <- query @PendingSettlement settlementOperator
+  length operatorPendingSettlements === 1
+
+  operatorReceipts <- query @SettlementReceipt settlementOperator
+  length operatorReceipts === 0
+
+  pure ()

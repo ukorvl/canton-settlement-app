@@ -1,0 +1,107 @@
+module Tests.SettlementHappyPath where
+
+import DA.Assert
+import Daml.Script
+import SettlementRoom.Bond
+import SettlementRoom.Cash
+import SettlementRoom.Settlement
+import SettlementRoom.Trade
+
+settlementHappyPath : Script ()
+settlementHappyPath = script do
+  buyer <- allocateParty "BuyerCo"
+  seller <- allocateParty "SellerCo"
+  cashBank <- allocateParty "CashBank"
+  assetRegistrar <- allocateParty "AssetRegistrar"
+  settlementOperator <- allocateParty "SettlementOperator"
+  auditor <- allocateParty "Auditor"
+
+  let tradeId = "TRADE-001"
+  let isin = "US1234567890"
+  let quantity = 1.0
+  let price = 100.0
+  let currency = "USD"
+
+  cashHoldingCid <- submit (actAs [cashBank, buyer]) do
+    createCmd CashHolding with
+      issuer = cashBank
+      owner = buyer
+      amount = price
+      currency = currency
+
+  bondHoldingCid <- submit (actAs [assetRegistrar, seller]) do
+    createCmd BondHolding with
+      registrar = assetRegistrar
+      owner = seller
+      isin = isin
+      quantity = quantity
+
+  tradeProposalCid <- submit seller do
+    createCmd TradeProposal with
+      tradeId = tradeId
+      seller = seller
+      buyer = buyer
+      isin = isin
+      quantity = quantity
+      price = price
+      currency = currency
+
+  acceptedTradeCid <- submit buyer do
+    exerciseCmd tradeProposalCid AcceptTrade
+
+  pendingSettlementCid <- submit seller do
+    exerciseCmd acceptedTradeCid StartSettlement with
+      cashBank = cashBank
+      assetRegistrar = assetRegistrar
+      settlementOperator = settlementOperator
+
+  lockedCashCid <- submit buyer do
+    exerciseCmd cashHoldingCid LockCash with
+      settlementOperator = settlementOperator
+      tradeId = tradeId
+
+  lockedBondCid <- submit seller do
+    exerciseCmd bondHoldingCid LockBond with
+      settlementOperator = settlementOperator
+      tradeId = tradeId
+
+  settlementReceiptCid <- submit (actAs [settlementOperator, buyer, seller]) do
+    exerciseCmd pendingSettlementCid Settle with
+      lockedCashCid = lockedCashCid
+      lockedBondCid = lockedBondCid
+
+  sellerCashHoldings <- query @CashHolding seller
+  length sellerCashHoldings === 1
+  let [(_, sellerCash)] = sellerCashHoldings
+  sellerCash.issuer === cashBank
+  sellerCash.owner === seller
+  sellerCash.amount === price
+  sellerCash.currency === currency
+
+  buyerBondHoldings <- query @BondHolding buyer
+  length buyerBondHoldings === 1
+  let [(_, buyerBond)] = buyerBondHoldings
+  buyerBond.registrar === assetRegistrar
+  buyerBond.owner === buyer
+  buyerBond.isin === isin
+  buyerBond.quantity === quantity
+
+  operatorReceipts <- query @SettlementReceipt settlementOperator
+  length operatorReceipts === 1
+  let [(operatorReceiptCid, operatorReceipt)] = operatorReceipts
+  operatorReceiptCid === settlementReceiptCid
+  operatorReceipt.tradeId === tradeId
+  operatorReceipt.buyer === buyer
+  operatorReceipt.seller === seller
+  operatorReceipt.cashBank === cashBank
+  operatorReceipt.assetRegistrar === assetRegistrar
+  operatorReceipt.settlementOperator === settlementOperator
+  operatorReceipt.isin === isin
+  operatorReceipt.quantity === quantity
+  operatorReceipt.price === price
+  operatorReceipt.currency === currency
+
+  auditorReceipts <- query @SettlementReceipt auditor
+  length auditorReceipts === 0
+
+  pure ()
