@@ -23,6 +23,7 @@ This project consists of multiple parts:
 - `apps/api` hosts the service layer that talks to the ledger and exposes application APIs.
 - `apps/web` hosts the user-facing frontend.
 - `packages/daml-model` contains the Daml modules for cash, bond, trade, and settlement workflows.
+- `packages/daml-tests` contains Daml Script tests.
 - `packages/daml-generated` is reserved for generated client bindings and types derived from the Daml model.
 - `packages/shared` is reserved for TypeScript code shared across the API and web applications.
 - `docs/notes` is for design notes, modeling decisions, and learning material.

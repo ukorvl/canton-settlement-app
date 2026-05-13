@@ -1,7 +1,9 @@
 sdk-version: 3.4.11
-name: daml-model
+name: daml-tests
 source: daml
 version: 0.0.1
 dependencies:
   - daml-prim
   - daml-stdlib
+  - daml-script
+  - ../daml-model/.daml/dist/daml-model-0.0.1.dar

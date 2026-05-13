@@ -3,6 +3,7 @@
 ## Overview
 - This repo is a `pnpm` monorepo for learning and prototyping a Canton/Daml-based settlement workflow.
 - `packages/daml-model` is the main active package. It contains the Daml ledger model and the core workflow modules for cash, bond, trade, and pending settlement states.
+- `packages/daml-tests` contains Daml Script tests.
 - `packages/daml-generated` is reserved for generated bindings and types derived from the Daml model. Treat generated code as output, not hand-maintained source.
 - `packages/shared` is for TypeScript utilities and types shared by apps.
 
