@@ -8,3 +8,28 @@ template CashHolding
     currency : Text
   where
     signatory issuer, owner
+
+    choice LockCash : ContractId LockedCash
+      with
+        settlementOperator : Party
+        tradeId : Text
+      controller owner
+      do
+        create LockedCash with
+          issuer
+          owner
+          amount
+          currency
+          settlementOperator
+          tradeId
+
+template LockedCash
+  with
+    issuer : Party
+    owner : Party
+    amount : Decimal
+    currency : Text
+    settlementOperator : Party
+    tradeId : Text
+  where
+    signatory issuer, owner
