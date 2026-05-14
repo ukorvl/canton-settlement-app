@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
+  - packages/daml-generated/generated/*
 
 catalog:
   typescript: 6.0.3

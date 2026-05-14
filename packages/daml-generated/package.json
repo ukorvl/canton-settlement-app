@@ -1,5 +1,21 @@
 {
   "name": "@canton-settlement-app/daml-generated",
+  "scripts": {
+    "build": "./scripts/generate-daml-bindings.sh"
+  },
   "private": true,
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "generated/",
+    "index.js",
+    "index.d.ts"
+  ]
 }

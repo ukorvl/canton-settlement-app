@@ -24,11 +24,147 @@ importers:
 
   packages/daml-generated: {}
 
+  packages/daml-generated/generated/daml-model-0.0.1:
+    dependencies:
+      '@daml.js/ghc-stdlib-DA-Internal-Template-1.0.0':
+        specifier: file:../ghc-stdlib-DA-Internal-Template-1.0.0
+        version: link:../ghc-stdlib-DA-Internal-Template-1.0.0
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-DA-Exception-ArithmeticError-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-DA-Exception-AssertionFailed-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-DA-Exception-GeneralError-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-DA-Exception-PreconditionFailed-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-DA-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-GHC-Tuple-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-prim-GHC-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Date-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Internal-Down-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Logic-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Monoid-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-NonEmpty-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Random-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Semigroup-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Set-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Stack-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Time-Types-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/daml-stdlib-DA-Validation-Types-1.0.0:
+    dependencies:
+      '@daml.js/daml-stdlib-DA-NonEmpty-Types-1.0.0':
+        specifier: file:../daml-stdlib-DA-NonEmpty-Types-1.0.0
+        version: link:../daml-stdlib-DA-NonEmpty-Types-1.0.0
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
+  packages/daml-generated/generated/ghc-stdlib-DA-Internal-Template-1.0.0:
+    dependencies:
+      '@mojotech/json-type-validation':
+        specifier: ^3.1.0
+        version: 3.1.0
+
   packages/daml-model: {}
+
+  packages/daml-tests: {}
 
   packages/shared: {}
 
 packages:
+
+  '@mojotech/json-type-validation@3.1.0':
+    resolution: {integrity: sha512-ThH2EbHEUCPMHhXAtmYcDi0gmV+PZak4uvuWBMiBDqUuz7gGQUrsE5o1J6kKNLDX5cXAPqsfJ7uTfTcNdCDXxA==}
+    engines: {node: '>=6.0.0'}
+
+  lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -36,5 +172,11 @@ packages:
     hasBin: true
 
 snapshots:
+
+  '@mojotech/json-type-validation@3.1.0':
+    dependencies:
+      lodash.isequal: 4.5.0
+
+  lodash.isequal@4.5.0: {}
 
   typescript@6.0.3: {}
